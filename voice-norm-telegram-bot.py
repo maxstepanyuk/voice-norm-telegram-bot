@@ -112,10 +112,12 @@ async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
             await tg_file.download_to_drive(src)
             summary = await normalize(src, dst)
             with dst.open("rb") as f:
+                thread_id = msg.message_thread_id if msg.is_topic_message else None
                 await msg.reply_voice(
                     voice=f,
                     caption=summary,
                     duration=msg.voice.duration,
+                    message_thread_id=thread_id,
                 )
         except Exception:
             log.exception("failed to process voice message")
