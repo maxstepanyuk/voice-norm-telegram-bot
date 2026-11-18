@@ -1,0 +1,7 @@
+services:
+  voicenorm:
+    build: .
+    container_name: voice-norm-telegram-bot
+    restart: unless-stopped
+    environment:
+      BOT_TOKEN: ${BOT_TOKEN}
