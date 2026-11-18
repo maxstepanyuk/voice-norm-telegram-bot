@@ -16,6 +16,11 @@ TOLERANCE_LU = 0.3         # stop iterating when within this of target
 MAX_ITERATIONS = 4
 MAX_GAIN_DB = 40.0         # safety cap for very quiet recordings
 
+COMP_THRESHOLD = 0.05      # linear amplitude, ~ -26 dBFS
+COMP_RATIO = 4
+COMP_ATTACK_MS = 10
+COMP_RELEASE_MS = 150
+
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 log = logging.getLogger("voicenorm")
 
@@ -50,6 +55,9 @@ def limiter_filter(gain_db: float) -> str:
     ceiling = 10 ** (CEILING_DB / 20)
     # level=disabled stops alimiter from re-normalizing the output level
     return (
+        "highpass=f=80,"
+        f"acompressor=threshold={COMP_THRESHOLD:.4f}:ratio={COMP_RATIO}"
+        f":attack={COMP_ATTACK_MS}:release={COMP_RELEASE_MS}:knee=3:makeup=1,"
         f"volume={gain_db:.2f}dB,"
         f"alimiter=limit={ceiling:.4f}:attack=5:release=50:level=disabled"
     )
