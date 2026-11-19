@@ -118,6 +118,7 @@ async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
                     caption=summary,
                     duration=msg.voice.duration,
                     message_thread_id=thread_id,
+                    disable_notification=True,
                 )
         except Exception:
             log.exception("failed to process voice message")
