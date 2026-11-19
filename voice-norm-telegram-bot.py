@@ -126,8 +126,11 @@ async def handle_voice(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 def main() -> None:
     token = os.environ["BOT_TOKEN"]
     app = Application.builder().token(token).build()
-    app.add_handler(MessageHandler(filters.VOICE, handle_voice))
-    app.run_polling(allowed_updates=Update.ALL_TYPES)
+    # Only brand-new messages
+    app.add_handler(
+        MessageHandler(filters.UpdateType.MESSAGE & filters.VOICE, handle_voice)
+    )
+    app.run_polling(allowed_updates=["message"])
 
 
 if __name__ == "__main__":
